@@ -203,7 +203,23 @@ namespace Scratch
         [Test]
         public void CanGetTheHighestVersionNumberForVersionControlId()
         {
+            const string applicationName = "test";
 
+            VersionKeeper classUnderTest = BuildUpClassWithNewApplication(applicationName);
+            VersionedApplication application = classUnderTest.GetVersionedApplication(applicationName);
+
+            string firstVersionControlNumber = GenerateRandomVersionControlIdentifier();
+            application.RecordBuild(firstVersionControlNumber);
+            application.RecordBuild(firstVersionControlNumber);
+
+            string secondVersionControlNumber = GenerateRandomVersionControlIdentifier();
+
+            application.RecordBuild(secondVersionControlNumber);
+            application.RecordBuild(secondVersionControlNumber);
+
+            SemVersion version = application.GetHighestVersionForVersionControlId(firstVersionControlNumber);
+
+            Assert.That(version.ToString(), Is.EqualTo("0.0.1+2"));
         }
 
         [Test]
@@ -224,16 +240,12 @@ namespace Scratch
 
             application.RecordBuild(secondVersionControlNumber);
             application.RecordBuild(secondVersionControlNumber);
+            Assert.That(application.Version.ToString(), Is.EqualTo("0.0.2+2"));
 
             var secondInstanceOfVersionKeeper = new VersionKeeper(stateStore);
             application = secondInstanceOfVersionKeeper.GetVersionedApplication(applicationName);
-
+            
             Assert.That(application.Version.ToString(), Is.EqualTo("0.0.2+2"));
-
-            application.RecordBuild(firstVersionControlNumber);
-            application.RecordBuild(firstVersionControlNumber);
-
-            Assert.That(application.Version.ToString(), Is.EqualTo("0.0.1+4"));
         }
         
         private static VersionKeeper BuildUpClassWithNewApplication(string applicationName, VersionApplicationStateStoreMock stateStore = null)

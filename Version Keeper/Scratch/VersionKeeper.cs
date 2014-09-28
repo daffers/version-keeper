@@ -8,15 +8,10 @@ namespace Scratch
     public class VersionedApplication
     {
         private readonly VersionedApplicationState _state;
-        private int _patchNumber;
-
-        private readonly Dictionary<string, int> _buildHistory;
-
+        
         public VersionedApplication(VersionedApplicationState state)
         {
-            _patchNumber = 0;
             _state = state;
-            _buildHistory = new Dictionary<string, int>();
         }
 
         public string Name
@@ -36,16 +31,21 @@ namespace Scratch
 
         public void RecordBuild(string versionControlChangeIdentifier)
         {
-            if(!_buildHistory.ContainsKey(versionControlChangeIdentifier))
+            if(!_state.BuildHistory.ContainsKey(versionControlChangeIdentifier))
             {
-                _buildHistory.Add(versionControlChangeIdentifier, 1);
-                _patchNumber ++;
+                _state.BuildHistory.Add(versionControlChangeIdentifier, );
+                _state.PatchNumber ++;
             }
             else
-                _buildHistory[versionControlChangeIdentifier]++;
-            
-            _state.CurrentVersion = _state.CurrentVersion.Change(build: _buildHistory[versionControlChangeIdentifier].ToString());
-            _state.CurrentVersion = _state.CurrentVersion.Change(patch: _patchNumber);
+                _state.BuildHistory[versionControlChangeIdentifier]++;
+
+            _state.CurrentVersion = _state.CurrentVersion.Change(build: _state.BuildHistory[versionControlChangeIdentifier].ToString());
+            _state.CurrentVersion = _state.CurrentVersion.Change(patch: _state.PatchNumber);
+        }
+
+        public SemVersion GetHighestVersionForVersionControlId(string versionControlId)
+        {
+            return Version;
         }
     }
 
@@ -120,11 +120,33 @@ namespace Scratch
         public string ApplicationName { get; private set; }
         public string ApplicationDescription { get; private set; }
         public SemVersion CurrentVersion { get; set; }
+        public readonly Dictionary<string, SemVersion> BuildHistory;
+        public int PatchNumber;
+        
 
         public VersionedApplicationState(string applicationName, string applicationDescription)
         {
             ApplicationName = applicationName;
             ApplicationDescription = applicationDescription;
+            BuildHistory = new Dictionary<string, SemVersion>();
+            PatchNumber = 0;
+        }
+    }
+
+    public static class SemVersionExtensions
+    {
+        public static int GetBuildNumber(this SemVersion version)
+        {
+            int buildNumber = 0;
+            if (int.TryParse(version.Build, out buildNumber))
+                return buildNumber;
+
+            return -1;
+        }
+
+        public static void SetBuildNumber(this SemVersion version, int buildNumber)
+        {
+            version.Change(build: buildNumber.ToString());
         }
     }
 }
