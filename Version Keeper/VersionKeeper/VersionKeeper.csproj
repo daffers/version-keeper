@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{05CBD966-9458-4DA6-ACAE-09CC7F13797B}</ProjectGuid>
+    <ProjectGuid>{4E16D488-B5EA-4054-AF2B-678D443F5235}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Scratch</RootNamespace>
-    <AssemblyName>Scratch</AssemblyName>
+    <RootNamespace>VersionKeeper</RootNamespace>
+    <AssemblyName>VersionKeeper</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,17 +30,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FParsec">
-      <HintPath>..\packages\FParsec.1.0.1\lib\net40-client\FParsec.dll</HintPath>
-    </Reference>
-    <Reference Include="FParsecCS">
-      <HintPath>..\packages\FParsec.1.0.1\lib\net40-client\FParsecCS.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.framework, Version=2.6.3.13283, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
-    </Reference>
-    <Reference Include="Semver, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Semver">
       <HintPath>..\packages\semver.1.1.2\lib\net45\Semver.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -52,17 +42,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="ExistingVersionedApplication.cs" />
+    <Compile Include="IVersionApplicationStateStore.cs" />
+    <Compile Include="NullVersionedApplication.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SemVersionExtensions.cs" />
+    <Compile Include="VersionControlIdEntry.cs" />
+    <Compile Include="VersionedApplication.cs" />
+    <Compile Include="VersionedApplicationState.cs" />
+    <Compile Include="ApplicationVersionKeeper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\VersionKeeper\VersionKeeper.csproj">
-      <Project>{4E16D488-B5EA-4054-AF2B-678D443F5235}</Project>
-      <Name>VersionKeeper</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

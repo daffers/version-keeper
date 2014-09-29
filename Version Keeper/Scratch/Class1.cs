@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using Semver;
+using VersionKeeper;
 
 namespace Scratch
 {
@@ -12,7 +13,7 @@ namespace Scratch
         {
             var stateStoreSpy = new VersionApplicationStateStoreMock();
 
-            var classUnderTest = new VersionKeeper(stateStoreSpy);
+            var classUnderTest = new ApplicationVersionKeeper(stateStoreSpy);
             classUnderTest.AddVersionedApplication("TestApplication", "Application Description");
 
             stateStoreSpy.AssertThisApplicationWasCreated("TestApplication", "Application Description");
@@ -23,7 +24,7 @@ namespace Scratch
         {
             var stateStoreSpy = new VersionApplicationStateStoreMock();
 
-            var classUnderTest = new VersionKeeper(stateStoreSpy);
+            var classUnderTest = new ApplicationVersionKeeper(stateStoreSpy);
             VersionedApplication versionedApplication = classUnderTest.AddVersionedApplication("TestApplication", "Application Description");
 
             Assert.That(versionedApplication, Is.Not.Null);
@@ -36,7 +37,7 @@ namespace Scratch
             var stateStoreSpy = new VersionApplicationStateStoreMock();
             stateStoreSpy.SetupApplicationStateToReturn(state);
 
-            var classUnderTest = new VersionKeeper(stateStoreSpy);
+            var classUnderTest = new ApplicationVersionKeeper(stateStoreSpy);
 
             var existingApplication = classUnderTest.AddVersionedApplication("test", "other description");
             Assert.That(existingApplication, Is.TypeOf<ExistingVersionedApplication>());
@@ -56,7 +57,7 @@ namespace Scratch
             var stateStore = new VersionApplicationStateStoreMock();
             stateStore.SetupApplicationStateToReturn(new VersionedApplicationState(applicationName, applicationDescription));
 
-            var classUnderTest = new VersionKeeper(stateStore);
+            var classUnderTest = new ApplicationVersionKeeper(stateStore);
             VersionedApplication application = classUnderTest.GetVersionedApplication(applicationName);
 
             Assert.That(application, Is.Not.Null);
@@ -69,7 +70,7 @@ namespace Scratch
         [Test]
         public void WhenApplicationDoesNotExistANullApplicationIsReturned()
         {
-            var classUnderTest = new VersionKeeper(new VersionApplicationStateStoreMock());
+            var classUnderTest = new ApplicationVersionKeeper(new VersionApplicationStateStoreMock());
             VersionedApplication application = classUnderTest.GetVersionedApplication("applicationName");
 
             Assert.That(application, Is.TypeOf<NullVersionedApplication>());
@@ -86,7 +87,7 @@ namespace Scratch
         [Test]
         public void TheDefaultVersionForAnApplicaitonIs_0_0_0_0()
         {
-            var classUnderTest = new VersionKeeper(new VersionApplicationStateStoreMock());
+            var classUnderTest = new ApplicationVersionKeeper(new VersionApplicationStateStoreMock());
             VersionedApplication application = classUnderTest.AddVersionedApplication("name", "desc");
 
             Assert.That(application.Version, Is.TypeOf<SemVersion>());
@@ -97,7 +98,7 @@ namespace Scratch
         public void CanCreateAnApplicationAtASpecificVersion()
         {
             const string setVersion = "1.2.3-4";
-            var classUnderTest = new VersionKeeper(new VersionApplicationStateStoreMock());
+            var classUnderTest = new ApplicationVersionKeeper(new VersionApplicationStateStoreMock());
             VersionedApplication application = classUnderTest.AddVersionedApplication("name", "desc",
                 SemVersion.Parse(setVersion));
 
@@ -156,10 +157,10 @@ namespace Scratch
             var application = classUnderTest.GetVersionedApplication(applicationName);
 
             application.RecordBuild(GenerateRandomVersionControlIdentifier());
-            Assert.That(application.Version.Patch, Is.EqualTo(1));
+            Assert.That(application.Version.Patch, Is.EqualTo(0));
 
             application.RecordBuild(GenerateRandomVersionControlIdentifier());
-            Assert.That(application.Version.Patch, Is.EqualTo(2));
+            Assert.That(application.Version.Patch, Is.EqualTo(1));
         }
 
         [Test]
@@ -180,7 +181,7 @@ namespace Scratch
             application.RecordBuild(secondVersionControlNumber);
             application.RecordBuild(secondVersionControlNumber);
 
-            Assert.That(application.Version.ToString(), Is.EqualTo("0.0.2+2"));
+            Assert.That(application.Version.ToString(), Is.EqualTo("0.0.1+2"));
         }
 
         [Test]
@@ -205,7 +206,7 @@ namespace Scratch
         {
             const string applicationName = "test";
 
-            VersionKeeper classUnderTest = BuildUpClassWithNewApplication(applicationName);
+            ApplicationVersionKeeper classUnderTest = BuildUpClassWithNewApplication(applicationName);
             VersionedApplication application = classUnderTest.GetVersionedApplication(applicationName);
 
             string firstVersionControlNumber = GenerateRandomVersionControlIdentifier();
@@ -229,8 +230,8 @@ namespace Scratch
 
             var stateStore = new VersionApplicationStateStoreMock();
 
-            VersionKeeper firstInstanceOfVersionKeeper = BuildUpClassWithNewApplication(applicationName, stateStore);
-            VersionedApplication application = firstInstanceOfVersionKeeper.GetVersionedApplication(applicationName);
+            ApplicationVersionKeeper firstInstanceOfApplicationVersionKeeper = BuildUpClassWithNewApplication(applicationName, stateStore);
+            VersionedApplication application = firstInstanceOfApplicationVersionKeeper.GetVersionedApplication(applicationName);
 
             string firstVersionControlNumber = GenerateRandomVersionControlIdentifier();
             application.RecordBuild(firstVersionControlNumber);
@@ -240,23 +241,22 @@ namespace Scratch
 
             application.RecordBuild(secondVersionControlNumber);
             application.RecordBuild(secondVersionControlNumber);
-            Assert.That(application.Version.ToString(), Is.EqualTo("0.0.2+2"));
+            Assert.That(application.Version.ToString(), Is.EqualTo("0.0.1+2"));
 
-            var secondInstanceOfVersionKeeper = new VersionKeeper(stateStore);
+            var secondInstanceOfVersionKeeper = new ApplicationVersionKeeper(stateStore);
             application = secondInstanceOfVersionKeeper.GetVersionedApplication(applicationName);
             
-            Assert.That(application.Version.ToString(), Is.EqualTo("0.0.2+2"));
+            Assert.That(application.Version.ToString(), Is.EqualTo("0.0.1+2"));
         }
         
-        private static VersionKeeper BuildUpClassWithNewApplication(string applicationName, VersionApplicationStateStoreMock stateStore = null)
+        private static ApplicationVersionKeeper BuildUpClassWithNewApplication(string applicationName, VersionApplicationStateStoreMock stateStore = null)
         {
             if (stateStore == null)
                 stateStore = new VersionApplicationStateStoreMock();
 
             var versionedApplicationState = new VersionedApplicationState(applicationName, "");
-            versionedApplicationState.CurrentVersion = new SemVersion(new Version());
             stateStore.SetupApplicationStateToReturn(versionedApplicationState);
-            var classUnderTest = new VersionKeeper(stateStore);
+            var classUnderTest = new ApplicationVersionKeeper(stateStore);
             return classUnderTest;
         }
 

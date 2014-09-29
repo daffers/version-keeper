@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VersionKeeperWebApi", "Vers
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scratch", "Scratch\Scratch.csproj", "{05CBD966-9458-4DA6-ACAE-09CC7F13797B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VersionKeeper", "VersionKeeper\VersionKeeper.csproj", "{4E16D488-B5EA-4054-AF2B-678D443F5235}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{05CBD966-9458-4DA6-ACAE-09CC7F13797B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{05CBD966-9458-4DA6-ACAE-09CC7F13797B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{05CBD966-9458-4DA6-ACAE-09CC7F13797B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E16D488-B5EA-4054-AF2B-678D443F5235}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E16D488-B5EA-4054-AF2B-678D443F5235}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E16D488-B5EA-4054-AF2B-678D443F5235}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E16D488-B5EA-4054-AF2B-678D443F5235}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
