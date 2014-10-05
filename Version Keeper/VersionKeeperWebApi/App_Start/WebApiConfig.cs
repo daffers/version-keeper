@@ -15,6 +15,11 @@ namespace VersionKeeperWebApi
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
+                name: "Root",
+                routeTemplate: "api",
+                defaults: new { controller = "Root"});
+
+            config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
