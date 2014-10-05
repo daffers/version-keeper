@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using NUnit.Framework;
 using VersionKeeperWebApi;
+using WebApi.Hal;
 
 namespace Scratch
 {
@@ -17,20 +18,31 @@ namespace Scratch
         [Test]
         public void LoadTheSiteInMemory()
         {
-            HttpResponseMessage response = null;
-            var httpConfiguration = new HttpConfiguration();
-            WebApiConfig.Register(httpConfiguration);
-            using (var server = new HttpServer(httpConfiguration))
-            {
-                var request = new HttpRequestMessage(HttpMethod.Get, new Uri("http://localhost/api"));
-                using (var client = new HttpClient(server))
-                {
-                    response = client.SendAsync(request).Result;
-                }
-            }
+            var response = ApiNavigation.GetSiteRoot();
 
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
         }
 
+        [Test]
+        [Ignore("till we figure out why it fails")]
+        public void TheMediaTypeOfTheResponseIsJsonHal()
+        {
+            var response = ApiNavigation.GetSiteRoot();
+
+            Assert.That(response.Content.Headers.ContentType.MediaType, Is.EqualTo("application/hal+json"));
+        }
+
+        [Test]
+        public void CanFormatTheResponseOnRootToARepresentationObject()
+        {
+
+        }
+    }
+
+    public class Blank : Representation
+    {
+        protected override void CreateHypermedia()
+        {
+        }
     }
 }

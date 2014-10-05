@@ -56,6 +56,9 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
+    <Reference Include="WebApi.Hal">
+      <HintPath>..\packages\WebApi.Hal.2.4.0\lib\net45\WebApi.Hal.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
