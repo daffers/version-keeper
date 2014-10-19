@@ -77,5 +77,19 @@ namespace VersionKeeper
         {
             return Version;
         }
+
+        public void IncrementMinorVersion()
+        {
+            if (NoBuildHistoryForApplication())
+                _state.BuildHistory.Add(new VersionControlIdEntry("",  new SemVersion(0,1)));
+            else
+            {
+                VersionControlIdEntry latestBuild = _state.BuildHistory.Last();
+                var highestVersion = latestBuild.HighestVersion;
+                var nextMinor = highestVersion.Minor + 1;
+                var nextVersion = highestVersion.Change(minor: nextMinor, patch:0, build:"0");
+                _state.BuildHistory.Add(new VersionControlIdEntry(latestBuild.VersionControlId, nextVersion));
+            }
+        }
     }
 }

@@ -32,15 +32,20 @@ namespace Scratch
 
             LastResponse.TryGetContentValue(out lastResponse);
 
-            Assert.That(lastResponse.Links.Count, Is.AtLeast(1));
-
-            var createApplicationLink = lastResponse.Links.Single(link => link.Rel == "VersionedApplications");
+            var createApplicationLink = lastResponse.Links.SingleOrDefault(link => link.Rel == "VersionedApplications");
+            Assert.That(createApplicationLink, Is.Not.Null);
         }
 
 
         [Then(@"i should see the link allowing me to retrieve an application")]
         public void ThenIShouldSeeTheLinkAllowingMeToRetrieveAnApplication()
         {
+            Representation lastResponse = null;
+
+            LastResponse.TryGetContentValue(out lastResponse);
+
+            var createApplicationLink = lastResponse.Links.SingleOrDefault(link => link.Rel == "VersionedApplications");
+            Assert.That(createApplicationLink, Is.Not.Null);
         }
 
 

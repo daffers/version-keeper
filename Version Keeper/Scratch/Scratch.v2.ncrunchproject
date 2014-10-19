@@ -26,5 +26,8 @@
     <FixtureTestSelector>
       <FixtureName>Scratch.VersionKeeperWebApiFeature</FixtureName>
     </FixtureTestSelector>
+    <FixtureTestSelector>
+      <FixtureName>Scratch.ApiTests</FixtureName>
+    </FixtureTestSelector>
   </IgnoredTests>
 </ProjectConfiguration>

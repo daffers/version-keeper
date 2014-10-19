@@ -8,6 +8,8 @@ namespace Scratch
     [TestFixture]
     public class VersioningApplicationTests
     {
+        private readonly IncrementingMinorVersionTests _incrementingMinorVersionTests = new IncrementingMinorVersionTests();
+
         [Test]
         public void TheDefaultVersionForAnApplicaitonIs_0_0_0_0()
         {

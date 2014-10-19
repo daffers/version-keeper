@@ -1,0 +1,6 @@
+Usage Models:
+
+Question:
+ - where do we set major and minor versions from?
+ - should major and minor versions have versions control identifiers against them????
+ - we should allow incrementing major and minor versions with a version control identifier or not...

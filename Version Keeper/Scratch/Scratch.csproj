@@ -84,6 +84,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ApiTests.feature</DependentUpon>
     </Compile>
+    <Compile Include="IncrementingMinorVersionTests.cs" />
+    <Compile Include="StatePersistenceTests.cs" />
     <Compile Include="TestDoubles\VersionApplicationStateStoreMock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RecordingBuildsForANewApplication.cs" />
